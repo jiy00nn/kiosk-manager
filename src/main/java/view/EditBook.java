@@ -6,22 +6,20 @@
 package view;
 
 import dto.BookDto;
-import controller.ManagementBook;
-import java.sql.SQLException;
+import controller.ManagementBooks;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class EditBook extends javax.swing.JFrame {
 
-    private BookDto book = new BookDto();
-    private ManagementBook management;
+    private BookDto book;
+    private ManagementBooks controller;
     
-    public EditBook(BookDto book) {
+    public EditBook(ManagementBooks controller, BookDto book) {
         initComponents();
-        this.management = new ManagementBook();
+        this.controller = controller;
         this.book = book;
         setInitInfo();
+        this.setDefaultCloseOperation(this.DISPOSE_ON_CLOSE);
     }
     
     private void setInitInfo() {
@@ -32,14 +30,10 @@ public class EditBook extends javax.swing.JFrame {
         countField.setText(book.getCount().toString());
     }
     
-    private Date handleDate(String dateInString) throws ParseException{
-        if(dateInString == null) {
-            return null;
-        }
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-        return formatter.parse(dateInString);
+    public void setBookInfo(BookDto book) {
+        this.book = book;
     }
-
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -105,8 +99,6 @@ public class EditBook extends javax.swing.JFrame {
             }
         });
 
-        titleField.setText("jTextField1");
-
         jLabel6.setFont(new java.awt.Font("굴림", 0, 14)); // NOI18N
         jLabel6.setText("Title :");
 
@@ -121,12 +113,6 @@ public class EditBook extends javax.swing.JFrame {
 
         jLabel10.setFont(new java.awt.Font("굴림", 0, 14)); // NOI18N
         jLabel10.setText("Count :");
-
-        authorField.setText("jTextField1");
-
-        dateField.setText("jTextField1");
-
-        countField.setText("jTextField1");
 
         jButton4.setText("적용");
         jButton4.addActionListener(new java.awt.event.ActionListener() {
@@ -210,38 +196,37 @@ public class EditBook extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        try {
-            management.deleteBook(book);
-            javax.swing.JOptionPane.showMessageDialog(null, "Delete Success");
-            this.setVisible(false);
-        } catch (SQLException e) {
-            javax.swing.JOptionPane.showMessageDialog(null, "Cannot delete book info");
-            this.setVisible(false);
-        }
+        controller.deleteBook();
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         try{
-            book.setTitle(titleField.getText());
-            book.setAuthor(authorField.getText());
-            book.setDate(handleDate(dateField.getText()));
-            book.setGenre(genreComboBox.getSelectedItem().toString());
-            book.setCount(Integer.parseInt(countField.getText()));
+            controller.updateBook();
         } catch (ParseException e) {
             javax.swing.JOptionPane.showMessageDialog(null, "Please enter the exact format of the date.");
             date.setText("yyyy-mm-dd");
         }
-        
-        try {
-            management.updateBook(book);
-            javax.swing.JOptionPane.showMessageDialog(null, "Update sucess");
-            this.setVisible(false);
-        } catch (SQLException e) {
-            e.printStackTrace();
-            javax.swing.JOptionPane.showMessageDialog(null, "Cannot update book info");
-        }
     }//GEN-LAST:event_jButton4ActionPerformed
 
+    public String getTitle() {
+        return titleField.getText();
+    }
+    
+    public String getAuthor() {
+        return authorField.getText();
+    }
+    
+    public String getDate() {
+        return dateField.getText();
+    }
+    
+    public String getGenre() {
+        return genreComboBox.getSelectedItem().toString();
+    }
+    
+    public int getCount() {
+        return Integer.parseInt(countField.getText());
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField author;

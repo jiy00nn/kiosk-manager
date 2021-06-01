@@ -67,7 +67,7 @@ public class Management extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-       management.setManagement(new controller.ManagementBook());
+       management.setManagement(new controller.ManagementBooks());
        management.menu();
     }//GEN-LAST:event_jButton1ActionPerformed
 

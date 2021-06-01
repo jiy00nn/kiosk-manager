@@ -9,27 +9,23 @@ import java.util.List;
 import javax.swing.table.DefaultTableModel;
 
 import dto.BookDto;
-import controller.ManagementBook;
+import controller.ManagementBooks;
+import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.SQLException;
 
 public class BookManagement extends javax.swing.JFrame {
-    private ManagementBook controller;
+    private ManagementBooks controller;
     private List<BookDto> bookList;
     
-    public BookManagement(ManagementBook controller) {
+    public BookManagement(ManagementBooks controller, List<BookDto> bookList) {
         initComponents();
         this.controller = controller;
-        showAllBookList();
+        this.bookList = bookList;
         jTable1.setRowSelectionAllowed(true);
-        jTable1.addMouseListener(new MouseAdapter(){
-            public void mouseClicked(MouseEvent e) {
-                if (e.getClickCount() == 2){
-                    editBookData();
-                }
-            }
-        });
+        showBookList(bookList);
+        tableRightClick();
     }
 
     /**
@@ -50,6 +46,7 @@ public class BookManagement extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         jComboBox1 = new javax.swing.JComboBox<>();
+        refresh = new javax.swing.JButton();
 
         button1.setLabel("button1");
 
@@ -107,6 +104,13 @@ public class BookManagement extends javax.swing.JFrame {
 
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "title", "genre", "author", "status", "count" }));
 
+        refresh.setText("새로고침");
+        refresh.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                refreshActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -122,6 +126,8 @@ public class BookManagement extends javax.swing.JFrame {
                         .addComponent(searchBotton))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jButton2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(refresh)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jButton4))
                     .addComponent(jScrollPane1))
@@ -146,47 +152,27 @@ public class BookManagement extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton2)
-                    .addComponent(jButton4))
+                    .addComponent(jButton4)
+                    .addComponent(refresh))
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void showAllBookList() {
-        try {
-            bookList = controller.getAllBookList();
-            DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-            model.setNumRows(0);
-            for(int i = 0 ; i < bookList.size() ; i++) {
-                BookDto data = bookList.get(i);
-                Object[] row = {data.getTitle(), data.getGenre(), data.getAuthor(), data.getStatus(), data.getCount().toString()};
-                model.addRow(row);
-            }
-            jTable1.setModel(model);
-        } catch (SQLException e) {
-            javax.swing.JOptionPane.showMessageDialog(null, "Cannot load book list.");
-        }
-    }
-    
-    private void editBookData() {
-       int i = jTable1.getSelectedRow();
-       new EditBook(bookList.get(i)).setVisible(true);
-    }
-    
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         controller.back();
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        new AddBook().setVisible(true);
+        controller.viewAddBook();
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void searchBottonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchBottonActionPerformed
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
         model.setNumRows(0);
         try{
-           bookList = controller.searchBook(jComboBox1.getSelectedItem().toString(), jTextField1.getText());
+           bookList = controller.searchBooks(jComboBox1.getSelectedItem().toString(), jTextField1.getText());
            for(int i = 0 ; i < bookList.size() ; i++) {
                 BookDto data = bookList.get(i);
                 Object[] row = {data.getTitle(), data.getGenre(), data.getAuthor(), data.getStatus(), data.getCount().toString()};
@@ -200,6 +186,62 @@ public class BookManagement extends javax.swing.JFrame {
        jTable1.setModel(model);
     }//GEN-LAST:event_searchBottonActionPerformed
 
+    private void refreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshActionPerformed
+        bookList = controller.updateBookList();
+        showBookList(bookList);
+    }//GEN-LAST:event_refreshActionPerformed
+    
+    private void showBookList(List<BookDto> bookList) {
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        model.setNumRows(0);
+        for(int i = 0 ; i < bookList.size() ; i++) {
+            BookDto data = bookList.get(i);
+            Object[] row = {data.getTitle(), data.getGenre(), data.getAuthor(), data.getStatus(), data.getCount().toString()};
+            model.addRow(row);
+        }
+        jTable1.setModel(model);
+    }
+    
+    private void tableRightClick() {
+        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseReleased(java.awt.event.MouseEvent e){
+                int r = jTable1.rowAtPoint(e.getPoint());
+                if (r >= 0 && r < jTable1.getRowCount()) {
+                    jTable1.setRowSelectionInterval(r, r);
+                } else {
+                    jTable1.clearSelection();
+                }
+
+                int rowindex = jTable1.getSelectedRow();
+                if (rowindex < 0)
+                    return;
+                if (e.isPopupTrigger() && e.getComponent() instanceof javax.swing.JTable ) {
+                    if (e.isPopupTrigger() && e.getComponent() instanceof javax.swing.JTable ) {
+                        javax.swing.JPopupMenu popup = new javax.swing.JPopupMenu();
+                        javax.swing.JMenuItem item = new javax.swing.JMenuItem("편집");
+                        item.addActionListener(new java.awt.event.ActionListener() {
+                            @Override
+                            public void actionPerformed(ActionEvent e) {
+                                int row = jTable1.getSelectedRow();
+                                String value = jTable1.getModel().getValueAt(row, 0).toString();
+                                for(int i = 0 ; i < bookList.size() ; i++){
+                                    if(value == bookList.get(i).getTitle()){
+                                        controller.editBook(i);
+                                        break;
+                                    }
+                                }
+                            }
+                        });
+                        
+                        popup.add(item);
+                        popup.show(e.getComponent(), e.getX(), e.getY());
+                    }
+                }
+            }
+        });
+    }
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private java.awt.Button button1;
@@ -210,6 +252,7 @@ public class BookManagement extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextField1;
+    private javax.swing.JButton refresh;
     private javax.swing.JButton searchBotton;
     // End of variables declaration//GEN-END:variables
 }

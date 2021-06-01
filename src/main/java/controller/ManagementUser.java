@@ -22,7 +22,7 @@ import view.MemeberManagement;
  *
  * @author mkaid
  */
-public class ManagementUser implements ControllerInterface {
+public class ManagementUser extends CommonFeatures implements ControllerInterface {
     private UserDao userDao;
     private BookDao bookDao;
     private CheckoutBookDao cDao;
@@ -58,6 +58,9 @@ public class ManagementUser implements ControllerInterface {
         new Management().start();
     }
 
+    public void editUser() {
+        
+    }
     
     public void getUserInfo(UserDto user) throws SQLException, ParseException {
         cbook = cDao.getBookListByUser(user);

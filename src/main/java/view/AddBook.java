@@ -5,34 +5,24 @@
  */
 package view;
 
-import controller.ManagementBook;
+import controller.ManagementBooks;
 import dto.BookDto;
 import java.sql.SQLException;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import javax.swing.JFrame;
 
 public class AddBook extends javax.swing.JFrame {
-    private ManagementBook management_book;
+    private ManagementBooks controller;
     private BookDto book;
     
-    private Date handleDate(String dateInString) throws ParseException{
-        if(dateInString == null) {
-            return null;
-        }
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-        return formatter.parse(dateInString);
-    }
-    
-    public AddBook() {
+    public AddBook(controller.ManagementBooks controller) {
         initComponents();
         book = new BookDto();
-        management_book = new ManagementBook();
-        date.setText("yyyy-mm-dd");
+        this.controller = controller;
+        date.setText("1900-01-01");
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     }
-
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -124,13 +114,10 @@ public class AddBook extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
     
+    
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        book.setTitle(title.getText());
-        book.setAuthor(author.getText());
-        book.setGenre(jComboBox1.getSelectedItem().toString());
         try {
-            book.setDate(handleDate(date.getText()));
-            management_book.addBook(book);
+            controller.addBook();
             javax.swing.JOptionPane.showMessageDialog(null, "Sucess");
             contentClear();
         } catch (ParseException e) {
@@ -138,7 +125,6 @@ public class AddBook extends javax.swing.JFrame {
             date.setText("yyyy-mm-dd");
         } catch (SQLException e) {
             javax.swing.JOptionPane.showMessageDialog(null, "Cannot add this book");
-            
         }
     }//GEN-LAST:event_jButton2ActionPerformed
 
@@ -146,7 +132,23 @@ public class AddBook extends javax.swing.JFrame {
         title.setText("");
         author.setText("");
         jComboBox1.setSelectedIndex(0);
-        date.setText("");
+        date.setText("1900-01-01");
+    }
+    
+    public String getTitle() {
+        return title.getText();
+    }
+    
+    public String getAuthor() {
+        return author.getText();
+    }
+    
+    public String getGenre() {
+        return jComboBox1.getSelectedItem().toString();
+    }
+    
+    public String getDate() {
+        return date.getText();
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
