@@ -11,9 +11,4 @@ package controller;
  */
 public interface ControllerInterface {
     void start();
-    void add();
-    void getData();
-    void update();
-    void search();
-    void delete();
 }

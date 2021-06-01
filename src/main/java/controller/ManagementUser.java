@@ -16,21 +16,42 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import view.MemeberManagement;
 
 /**
  *
  * @author mkaid
  */
-public class ManagementUser {
-    private UserDao userDao = new UserDao();
-    private BookDao bookDao = new BookDao();
-    private CheckoutBookDao cDao = new CheckoutBookDao();
-    private List<CheckoutBookDto> cbook = new ArrayList();
-    private List<BookDto> book = new ArrayList();
+public class ManagementUser implements ControllerInterface {
+    private UserDao userDao;
+    private BookDao bookDao;
+    private CheckoutBookDao cDao;
+    private List<CheckoutBookDto> cbook;
+    private List<BookDto> book ;
+    private List<UserDto> user_list;
+    private MemeberManagement view;
     
-    public List<UserDto> getAllUserList() throws SQLException {
-        return userDao.getAll();
+    public ManagementUser() {
+        userDao = new UserDao();
+        user_list = new ArrayList();
+        bookDao = new BookDao();
+        cDao = new CheckoutBookDao();
+        book = new ArrayList();
+        cbook = new ArrayList();
+        view = new MemeberManagement(this);
+    };
+    
+    @Override
+    public void start(){
+        view.setVisible(true);
+        try {
+            user_list = userDao.getAll();
+            view.showUserList(user_list);
+        } catch (SQLException e) {
+            javax.swing.JOptionPane.showMessageDialog(null, "Cannot load user list.");
+        }
     }
+
     
     public void getUserInfo(UserDto user) throws SQLException, ParseException {
         cbook = cDao.getBookListByUser(user);
@@ -62,4 +83,5 @@ public class ManagementUser {
         cDao.deleteByUser(user.getUserNumber());
         userDao.delete(user);
     }
+
 }

@@ -15,12 +15,12 @@ import java.awt.event.MouseEvent;
 import java.sql.SQLException;
 
 public class BookManagement extends javax.swing.JFrame {
-    private ManagementBook managementBook;
+    private ManagementBook controller;
     private List<BookDto> bookList;
     
-    public BookManagement() {
+    public BookManagement(ManagementBook controller) {
         initComponents();
-        managementBook = new ManagementBook();
+        this.controller = controller;
         showAllBookList();
         jTable1.setRowSelectionAllowed(true);
         jTable1.addMouseListener(new MouseAdapter(){
@@ -155,7 +155,7 @@ public class BookManagement extends javax.swing.JFrame {
 
     private void showAllBookList() {
         try {
-            bookList = managementBook.getAllBookList();
+            bookList = controller.getAllBookList();
             DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
             model.setNumRows(0);
             for(int i = 0 ; i < bookList.size() ; i++) {
@@ -175,8 +175,6 @@ public class BookManagement extends javax.swing.JFrame {
     }
     
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        Management M = new Management();
-        M.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_jButton4ActionPerformed
 
@@ -188,7 +186,7 @@ public class BookManagement extends javax.swing.JFrame {
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
         model.setNumRows(0);
         try{
-           bookList = managementBook.searchBook(jComboBox1.getSelectedItem().toString(), jTextField1.getText());
+           bookList = controller.searchBook(jComboBox1.getSelectedItem().toString(), jTextField1.getText());
            for(int i = 0 ; i < bookList.size() ; i++) {
                 BookDto data = bookList.get(i);
                 Object[] row = {data.getTitle(), data.getGenre(), data.getAuthor(), data.getStatus(), data.getCount().toString()};

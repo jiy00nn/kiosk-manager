@@ -5,16 +5,15 @@
  */
 package view;
 
-import controller.SignIn;
 import dto.ManagerDto;
 
-public class SingIn extends javax.swing.JFrame {
+public class SignIn extends javax.swing.JFrame {
 
-    private final SignIn signIn;
+    private final controller.SignIn controller;
     private final ManagerDto manager;
     
-    public SingIn() {        
-        this.signIn = new SignIn();
+    public SignIn(controller.SignIn controller) {        
+        this.controller = controller;
         this.manager = new ManagerDto();
         initComponents();
     }
@@ -106,11 +105,8 @@ public class SingIn extends javax.swing.JFrame {
     private void loginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginActionPerformed
         this.manager.setId(id.getText());
         this.manager.setPassword(pw.getText());
-        if (this.signIn.login(this.manager)) {
-            this.setVisible(false);
-            new Management().setVisible(true);
-        }
-        else {
+        this.controller.setData(manager);
+        if (!this.controller.login()) {
             javax.swing.JOptionPane.showMessageDialog(null, "Enter wrong id or password");
             contentClear();
         }

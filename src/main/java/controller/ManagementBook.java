@@ -14,13 +14,20 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import view.BookManagement;
 
-public class ManagementBook {
+public class ManagementBook implements ControllerInterface {
     private BookDao dao;
+    private BookManagement view;
 
     public ManagementBook() {
-        super();
         dao = new BookDao();
+        view = new BookManagement(this);
+    }
+    
+    @Override
+    public void start() {
+        view.setVisible(true);
     }
     
     public void addBook(BookDto book) throws SQLException {
@@ -112,6 +119,7 @@ public class ManagementBook {
             return book_list;
         }
     }
+
 
     
 }

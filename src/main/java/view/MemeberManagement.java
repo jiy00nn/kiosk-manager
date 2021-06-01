@@ -7,19 +7,15 @@ package view;
 
 import controller.ManagementUser;
 import dto.UserDto;
-import java.sql.SQLException;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
 
 public class MemeberManagement extends javax.swing.JFrame {
-
-    private ManagementUser management;
-    private List<UserDto> user_list;
+    private ManagementUser controller;
     
-    public MemeberManagement() {
+    public MemeberManagement(ManagementUser controller) {
         initComponents();
-        management = new ManagementUser();
-        showAllUserList();
+        this.controller = controller;
         jTable1.setRowSelectionAllowed(true);
         jTable1.addMouseListener(new java.awt.event.MouseAdapter(){
             public void mouseClicked(java.awt.event.MouseEvent e) {
@@ -30,25 +26,20 @@ public class MemeberManagement extends javax.swing.JFrame {
         });
     }
     
-    private void showAllUserList() {
-        try {
-            user_list = management.getAllUserList();
-            DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-            model.setNumRows(0);
-            for(int i = 0 ; i < user_list.size() ; i++) {
-                UserDto data = user_list.get(i);
-                Object[] row = {data.getUserNumber(), data.getId(), data.getName(), data.getPassword()};
-                model.addRow(row);
-            }
-            jTable1.setModel(model);
-        } catch (SQLException e) {
-            javax.swing.JOptionPane.showMessageDialog(null, "Cannot load user list.");
+    public void showUserList(List<UserDto> user_list) {
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        model.setNumRows(0);
+        for(int i = 0 ; i < user_list.size() ; i++) {
+            UserDto data = user_list.get(i);
+            Object[] row = {data.getUserNumber(), data.getId(), data.getName(), data.getPassword()};
+            model.addRow(row);
         }
+        jTable1.setModel(model);
     }
     
     private void editUserInfo() {
         int i = jTable1.getSelectedRow();
-        new EditUserInfo(user_list.get(i)).setVisible(true);
+        //new EditUserInfo(user_list.get(i)).setVisible(true);
     }
 
     /**
@@ -152,9 +143,6 @@ public class MemeberManagement extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        // TODO add your handling code here:
-        Management M = new Management();
-        M.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_jButton4ActionPerformed
 
