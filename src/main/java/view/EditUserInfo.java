@@ -13,7 +13,9 @@ import java.awt.event.ActionEvent;
 import java.util.List;
 import java.sql.SQLException;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import javax.swing.event.TableModelEvent;
 import javax.swing.table.DefaultTableModel;
 
@@ -24,6 +26,14 @@ public class EditUserInfo extends javax.swing.JFrame {
     private List<CheckoutBookDto> check_out = new ArrayList();
     private List<BookDto> book_list = new ArrayList();
     private DefaultTableModel model;
+    
+    private Date handleDate(String dateInString) throws ParseException{
+        if(dateInString == null) {
+            return null;
+        }
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        return formatter.parse(dateInString);
+    }
     
     public EditUserInfo(UserDto user) {
         initComponents();
@@ -270,7 +280,7 @@ public class EditUserInfo extends javax.swing.JFrame {
                 if(info.isEditing()){
                     String value = info.getValueAt(rowindex, 2).toString();
                     try {
-                        check_out.get(rowindex).setReturnDate(value);
+                        check_out.get(rowindex).setReturnDate(handleDate(value));
                     } catch (ParseException ex) {
                         javax.swing.JOptionPane.showMessageDialog(null, "Enter the date in the format 'yyyy-mm-dd'.");
                     }

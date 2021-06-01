@@ -9,6 +9,8 @@ import dto.BookDto;
 import controller.ManagementBook;
 import java.sql.SQLException;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class EditBook extends javax.swing.JFrame {
 
@@ -28,6 +30,14 @@ public class EditBook extends javax.swing.JFrame {
         dateField.setText(book.getDate().toString());
         genreComboBox.setSelectedItem(book.getGenre());
         countField.setText(book.getCount().toString());
+    }
+    
+    private Date handleDate(String dateInString) throws ParseException{
+        if(dateInString == null) {
+            return null;
+        }
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        return formatter.parse(dateInString);
     }
 
     /**
@@ -214,7 +224,7 @@ public class EditBook extends javax.swing.JFrame {
         try{
             book.setTitle(titleField.getText());
             book.setAuthor(authorField.getText());
-            book.setDate(dateField.getText());
+            book.setDate(handleDate(dateField.getText()));
             book.setGenre(genreComboBox.getSelectedItem().toString());
             book.setCount(Integer.parseInt(countField.getText()));
         } catch (ParseException e) {
