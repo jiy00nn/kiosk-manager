@@ -30,6 +30,12 @@ public class ManagementBook implements ControllerInterface {
         view.setVisible(true);
     }
     
+    @Override
+    public void back() {
+        view.setVisible(false);
+        new Management().start();
+    }
+    
     public void addBook(BookDto book) throws SQLException {
         book.setId(UUID.randomUUID());
         book.setStatus("True");

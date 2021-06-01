@@ -109,6 +109,8 @@ public class SignIn extends javax.swing.JFrame {
         if (!this.controller.login()) {
             javax.swing.JOptionPane.showMessageDialog(null, "Enter wrong id or password");
             contentClear();
+        } else {
+            this.controller.connect();
         }
     }//GEN-LAST:event_loginActionPerformed
 

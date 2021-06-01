@@ -11,4 +11,5 @@ package controller;
  */
 public interface ControllerInterface {
     void start();
+    void back();
 }

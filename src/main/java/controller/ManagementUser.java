@@ -51,6 +51,12 @@ public class ManagementUser implements ControllerInterface {
             javax.swing.JOptionPane.showMessageDialog(null, "Cannot load user list.");
         }
     }
+    
+    @Override
+    public void back() {
+        view.setVisible(false);
+        new Management().start();
+    }
 
     
     public void getUserInfo(UserDto user) throws SQLException, ParseException {

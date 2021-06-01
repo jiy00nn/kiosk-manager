@@ -32,10 +32,13 @@ public class SignIn {
         try {
             data = dao.getDataByKey("id", data.getId());
             view.setVisible(false);
-            new Management().start();
             return data.getId().equals(data.getId()) && data.getPassword().equals(data.getPassword());
         } catch (SQLException e) {
             return false;
         }
+    }
+    
+    public void connect() {
+        new Management().start();
     }
 }
