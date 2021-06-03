@@ -55,7 +55,6 @@ public class BookDao {
 
     public List<BookDto> getAll() throws SQLException, ParseException {
         
-        List<BookDto> book_list;
         book_list = new ArrayList<>();
         
         //SQL 문장 생성

@@ -49,8 +49,24 @@ public class ManagementUser extends EditUser implements ControllerInterface {
         view.setVisible(false);
         new Management().start();
     }
+    
+    public List<UserDto> getUserList() {
+        try{
+            user_list = userDao.getAll();
+        } catch (SQLException e) {
+            javax.swing.JOptionPane.showMessageDialog(null, "Cannot load user list.");
+        }
+        return user_list;
+    }
 
-    public void showEditUser(int index) {
+    public void showEditUser(UUID user_number) {
+        for(int i = 0 ; i < user_list.size() ; i++){
+            if(user_number == user_list.get(i).getUserNumber()){
+                index = i;
+                break;
+            }
+        }
+        
         try {
             this.cbook_list = this.getCheckoutList(user_list.get(index));
         } catch (SQLException e) {
@@ -58,5 +74,30 @@ public class ManagementUser extends EditUser implements ControllerInterface {
         }
         editView = new EditUserInfo(this, user_list.get(index), this.cbook_list);
         editView.setVisible(true);
+    }
+    
+    public List<UserDto> searchUsers(String key, String search_text) {
+        List<UserDto> model = new ArrayList();
+        search_text = search_text.toLowerCase();
+        
+        switch (key) {
+            case "ID":
+                for(int i = 0 ; i < user_list.size() ; i++){
+                    if(user_list.get(i).getId().toLowerCase().contains(search_text)){
+                        model.add(user_list.get(i));
+                    }
+                }
+                break;
+            case "Name":
+                for(int i = 0 ; i < user_list.size() ; i++){
+                    if(user_list.get(i).getName().toLowerCase().contains(search_text)){
+                        model.add(user_list.get(i));
+                    }
+                }
+                break;
+        }
+        
+        
+        return model;
     }
 }

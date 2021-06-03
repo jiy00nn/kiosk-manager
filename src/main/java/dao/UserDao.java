@@ -51,6 +51,9 @@ public class UserDao {
 
     
     public List<UserDto> getAll() throws SQLException {
+        
+        user_list = new ArrayList<>();
+        
         //SQL 문장 생성
         StringBuilder sql = new StringBuilder();
         sql.append("SELECT * FROM USER");
