@@ -15,7 +15,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.SQLException;
 
-public class BookManagement extends javax.swing.JFrame {
+public class BookManagement extends TemplateMethod {
     private ManagementBooks controller;
     private List<BookDto> bookList;
     
@@ -23,8 +23,9 @@ public class BookManagement extends javax.swing.JFrame {
         initComponents();
         this.controller = controller;
         this.bookList = bookList;
+        this.model = (DefaultTableModel) jTable1.getModel();
         jTable1.setRowSelectionAllowed(true);
-        showBookList(bookList);
+        showList();
         tableRightClick();
     }
 
@@ -169,7 +170,6 @@ public class BookManagement extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void searchBottonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchBottonActionPerformed
-        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
         model.setNumRows(0);
         try{
            bookList = controller.searchBooks(jComboBox1.getSelectedItem().toString(), jTextField1.getText());
@@ -188,17 +188,21 @@ public class BookManagement extends javax.swing.JFrame {
 
     private void refreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshActionPerformed
         bookList = controller.getBookList();
-        showBookList(bookList);
+        showList();
     }//GEN-LAST:event_refreshActionPerformed
+
     
-    private void showBookList(List<BookDto> bookList) {
-        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-        model.setNumRows(0);
+    @Override
+    void makeModel() {
         for(int i = 0 ; i < bookList.size() ; i++) {
             BookDto data = bookList.get(i);
             Object[] row = {data.getTitle(), data.getGenre(), data.getAuthor(), data.getStatus(), data.getCount().toString()};
             model.addRow(row);
         }
+    }
+
+    @Override
+    void setTableModel() {
         jTable1.setModel(model);
     }
     
@@ -255,4 +259,6 @@ public class BookManagement extends javax.swing.JFrame {
     private javax.swing.JButton refresh;
     private javax.swing.JButton searchBotton;
     // End of variables declaration//GEN-END:variables
+
+
 }

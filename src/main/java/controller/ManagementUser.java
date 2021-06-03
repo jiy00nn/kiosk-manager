@@ -5,14 +5,8 @@
  */
 package controller;
 
-import dto.BookDto;
 import dto.UserDto;
-import dao.BookDao;
-import dao.UserDao;
-import dto.CheckoutBookDto;
-import dao.CheckoutBookDao;
 import java.sql.SQLException;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -41,7 +35,6 @@ public class ManagementUser extends EditUser implements ControllerInterface {
     @Override
     public void start(){
         view.setVisible(true);
-        view.showUserList(user_list);
     }
     
     @Override

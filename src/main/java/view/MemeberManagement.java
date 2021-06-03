@@ -11,7 +11,7 @@ import java.awt.event.ActionEvent;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
 
-public class MemeberManagement extends javax.swing.JFrame {
+public class MemeberManagement extends TemplateMethod {
     private ManagementUser controller;
     private List<UserDto> user_list;
     
@@ -20,17 +20,22 @@ public class MemeberManagement extends javax.swing.JFrame {
         this.controller = controller;
         this.user_list = user_list;
         jTable1.setRowSelectionAllowed(true);
+        this.model = (DefaultTableModel) jTable1.getModel();
+        showList();
         tableRightClick();
     }
     
-    public void showUserList(List<UserDto> user_list) {
-        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-        model.setNumRows(0);
+    @Override
+    void makeModel() {
         for(int i = 0 ; i < user_list.size() ; i++) {
             UserDto data = user_list.get(i);
             Object[] row = {data.getId(), data.getName(), data.getPassword()};
             model.addRow(row);
         }
+    }
+
+    @Override
+    void setTableModel() {
         jTable1.setModel(model);
     }
     
@@ -187,7 +192,7 @@ public class MemeberManagement extends javax.swing.JFrame {
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         user_list = controller.getUserList();
-        showUserList(user_list);
+        showList();
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
