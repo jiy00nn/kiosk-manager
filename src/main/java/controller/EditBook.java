@@ -9,10 +9,6 @@ import dao.BookDao;
 import dto.BookDto;
 import java.sql.SQLException;
 
-/**
- *
- * @author mkaid
- */
 public class EditBook extends CommonFeatures {
     protected BookDao dao;
     

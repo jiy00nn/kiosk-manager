@@ -16,40 +16,36 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import view.EditUserInfo;
 import view.MemeberManagement;
 
 /**
  *
  * @author mkaid
  */
-public class ManagementUser extends CommonFeatures implements ControllerInterface {
-    private UserDao userDao;
-    private BookDao bookDao;
-    private CheckoutBookDao cDao;
+public class ManagementUser extends EditUser implements ControllerInterface {
     private List<CheckoutBookDto> cbook;
     private List<BookDto> book ;
     private List<UserDto> user_list;
     private MemeberManagement view;
+    private EditUserInfo editView;
+    private int index;
     
     public ManagementUser() {
-        userDao = new UserDao();
-        user_list = new ArrayList();
-        bookDao = new BookDao();
-        cDao = new CheckoutBookDao();
         book = new ArrayList();
         cbook = new ArrayList();
-        view = new MemeberManagement(this);
+        try{
+            user_list = userDao.getAll();
+        } catch (SQLException e) {
+            javax.swing.JOptionPane.showMessageDialog(null, "Cannot load user list.");
+        }
+        view = new MemeberManagement(this, this.user_list);
     };
     
     @Override
     public void start(){
         view.setVisible(true);
-        try {
-            user_list = userDao.getAll();
-            view.showUserList(user_list);
-        } catch (SQLException e) {
-            javax.swing.JOptionPane.showMessageDialog(null, "Cannot load user list.");
-        }
+        view.showUserList(user_list);
     }
     
     @Override
@@ -58,8 +54,9 @@ public class ManagementUser extends CommonFeatures implements ControllerInterfac
         new Management().start();
     }
 
-    public void editUser() {
-        
+    public void editUser(int index) {
+        editView = new EditUserInfo(user_list.get(index));
+        editView.setVisible(true);
     }
     
     public void getUserInfo(UserDto user) throws SQLException, ParseException {
