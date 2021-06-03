@@ -187,7 +187,7 @@ public class BookManagement extends javax.swing.JFrame {
     }//GEN-LAST:event_searchBottonActionPerformed
 
     private void refreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshActionPerformed
-        bookList = controller.updateBookList();
+        bookList = controller.getBookList();
         showBookList(bookList);
     }//GEN-LAST:event_refreshActionPerformed
     

@@ -59,7 +59,7 @@ public class MemeberManagement extends javax.swing.JFrame {
                                 Object value = jTable1.getModel().getValueAt(row, 0);
                                 for(int i = 0 ; i < user_list.size() ; i++){
                                     if(value == user_list.get(i).getUserNumber()){
-                                        controller.editUser(i);
+                                        controller.showEditUser(i);
                                         break;
                                     }
                                 }

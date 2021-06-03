@@ -24,7 +24,7 @@ public class ManagementBooks extends EditBook implements ControllerInterface {
     public ManagementBooks() {
         super();
         dao = new BookDao();
-        book_list = this.updateBookList();
+        book_list = this.getBookList();
         mainView = new BookManagement(this, book_list);
         addView = new AddBook(this);
         editView = new view.EditBook(this, book_list.get(0));
@@ -33,7 +33,6 @@ public class ManagementBooks extends EditBook implements ControllerInterface {
     @Override
     public void start() {
         mainView.setVisible(true);
-        updateBookList();
     }
     
     @Override
@@ -145,10 +144,6 @@ public class ManagementBooks extends EditBook implements ControllerInterface {
     }
     
     public List<BookDto> getBookList() {
-        return book_list;
-    }
-    
-    public List<BookDto> updateBookList() {
         try {
             book_list = dao.getAll();
         } catch (SQLException e) {

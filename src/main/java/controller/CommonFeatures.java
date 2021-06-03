@@ -14,7 +14,7 @@ import java.util.Date;
  * @author mkaid
  */
 public class CommonFeatures {
-    protected Date handleDate(String dateInString) throws ParseException {
+    public Date handleDate(String dateInString) throws ParseException {
         if(dateInString == null) {
             return null;
         }

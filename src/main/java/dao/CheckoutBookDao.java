@@ -87,6 +87,7 @@ public class CheckoutBookDao {
                         CheckoutBookDto data = new CheckoutBookDto();
                         data.setUserId(user.getUserNumber());
                         data.setBookId(UUID.fromString(rs.getString("book_id")));
+                        data.setBookTitle(rs.getString("title"));
                         data.setRentalDate(rs.getDate("rental_date"));
                         data.setReturnDate(rs.getDate("return_date"));
                         book_list.add(data);
@@ -132,21 +133,6 @@ public class CheckoutBookDao {
                 pstm.setString(2, check_out.getUserId().toString());
                 pstm.setString(3, check_out.getBookId().toString());
                 pstm.setDate(4, UtilDateToSqlDate(check_out.getRentalDate()));
-                pstm.executeUpdate();
-            }
-        }
-    };
-    
-    
-    public void delete(CheckoutBookDto check_out) throws SQLException {
-        
-        //SQL 문장 생성
-        StringBuilder sql = new StringBuilder();
-        sql.append("DELETE FROM CHECKOUTBOOK WHERE user_number = ?");
-        
-        try(Connection conn = db.connectDB()){
-            try(PreparedStatement pstm = conn.prepareStatement(sql.toString())){
-                pstm.setString(1, check_out.getUserId().toString());
                 pstm.executeUpdate();
             }
         }

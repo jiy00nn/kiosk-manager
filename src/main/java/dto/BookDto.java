@@ -90,11 +90,7 @@ public class BookDto {
     }
     
     public void setStatus(String status){
-        if(this.count > 0){
-            this.status = "True";
-        } else {
-            this.status = "False";
-        }
+        this.status = status;
     }
     
     public Integer getCount(){

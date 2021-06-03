@@ -14,40 +14,24 @@ import java.util.List;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import javax.swing.event.TableModelEvent;
 import javax.swing.table.DefaultTableModel;
 
 public class EditUserInfo extends javax.swing.JFrame {
-
-    private UserDto user = new UserDto();
-    private ManagementUser management = new ManagementUser();
-    private List<CheckoutBookDto> check_out = new ArrayList();
-    private List<BookDto> book_list = new ArrayList();
+    
     private DefaultTableModel model;
     
-    private Date handleDate(String dateInString) throws ParseException{
-        if(dateInString == null) {
-            return null;
-        }
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-        return formatter.parse(dateInString);
-    }
+    private UserDto user;
+    private List<CheckoutBookDto> check_out;
+    private final ManagementUser controller;
     
-    public EditUserInfo(UserDto user) {
+    public EditUserInfo(ManagementUser controller, UserDto user, List<CheckoutBookDto> check_out) {
         initComponents();
         this.user = user;
+        this.check_out = check_out;
+        this.controller = controller;
         model = (DefaultTableModel) info.getModel(); 
-        try {
-            management.getUserInfo(user);
-            this.check_out = management.getCheckOutBookList();
-            this.book_list = management.getBookList();
-        } catch (SQLException ex) {
-            javax.swing.JOptionPane.showMessageDialog(null, "Cannot load user information.");
-        } catch (ParseException ex) {
-            javax.swing.JOptionPane.showMessageDialog(null, "Cannot load user information.");
-        }
         
         this.setDefaultCloseOperation(this.DISPOSE_ON_CLOSE);
         showUserInfo();
@@ -204,7 +188,7 @@ public class EditUserInfo extends javax.swing.JFrame {
         this.user.setId(idField.getText());
         this.user.setPassword(passwordField.getText());
         try {
-            management.updateUserInfo(user, check_out);
+            controller.updateUserInfo(user, check_out);
             javax.swing.JOptionPane.showMessageDialog(null, "Reflect modifications complete.");
             this.setVisible(false);
         } catch (SQLException ex) {
@@ -224,9 +208,7 @@ public class EditUserInfo extends javax.swing.JFrame {
         model.setNumRows(0);
         
         for(int i = 0 ; i < check_out.size() ; i++) {
-            CheckoutBookDto c_book = check_out.get(i);
-            BookDto book_info = book_list.get(i);
-            Object[] row = {book_info.getTitle(), c_book.getRentalStringDate(), c_book.getReturnStringDate()};
+            Object[] row = {check_out.get(i).getBookTitle(), check_out.get(i).getRentalDate(), check_out.get(i).getReturnDate()};
             model.addRow(row);
         }
         
@@ -255,9 +237,8 @@ public class EditUserInfo extends javax.swing.JFrame {
                             @Override
                             public void actionPerformed(ActionEvent e) {
                                 try {
-                                    management.deleteCheckOutBook(book_list.get(rowindex).getId());
+                                    controller.deleteCheckOutBook(check_out.get(rowindex).getBookId());
                                     check_out.remove(rowindex);
-                                    book_list.remove(rowindex);
                                 } catch (SQLException ex) {
                                     javax.swing.JOptionPane.showMessageDialog(null, "Cannot delete this information.");
                                 }
@@ -280,7 +261,8 @@ public class EditUserInfo extends javax.swing.JFrame {
                 if(info.isEditing()){
                     String value = info.getValueAt(rowindex, 2).toString();
                     try {
-                        check_out.get(rowindex).setReturnDate(handleDate(value));
+                        java.util.Date tmp = controller.handleDate(value);
+                        check_out.get(rowindex).setReturnDate(tmp);
                     } catch (ParseException ex) {
                         javax.swing.JOptionPane.showMessageDialog(null, "Enter the date in the format 'yyyy-mm-dd'.");
                     }

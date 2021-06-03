@@ -21,15 +21,17 @@ import java.text.SimpleDateFormat;
 public class CheckoutBookDto {
     private UUID user_id;
     private UUID book_id;
+    private String book_title;
     private Date rental_date;
     private Date return_date;
     
     public CheckoutBookDto() {}
     
-    public CheckoutBookDto(UUID user_id, UUID book_id, Date rental_date, Date return_date) {
+    public CheckoutBookDto(UUID user_id, UUID book_id, String book_title, Date rental_date, Date return_date) {
         super();
         this.user_id = user_id;
         this.book_id = book_id;
+        this.book_title = book_title;
         this.rental_date = rental_date;
         this.return_date = return_date;
     }
@@ -48,6 +50,14 @@ public class CheckoutBookDto {
     
     public void setBookId(UUID book_id){
         this.book_id = book_id;
+    }
+    
+    public String getBookTitle() {
+        return book_title;
+    }
+    
+    public void setBookTitle(String book_title) {
+        this.book_title = book_title;
     }
     
     public Date getRentalDate(){

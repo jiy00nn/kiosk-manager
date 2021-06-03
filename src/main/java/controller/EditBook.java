@@ -17,11 +17,6 @@ public class EditBook extends CommonFeatures {
     }
     
     protected BookDto updateData(BookDto book) throws SQLException {
-        if(book.getCount() > 0) {
-            book.setStatus("True");
-        } else {
-            book.setStatus("False");
-        }
         dao.update(book);
         return book;
     }
