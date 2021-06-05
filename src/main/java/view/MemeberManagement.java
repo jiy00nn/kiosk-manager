@@ -11,9 +11,16 @@ import java.awt.event.ActionEvent;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
 
-public class MemeberManagement extends TemplateMethod {
+public class MemeberManagement extends AbstractManagement {
     private ManagementUser controller;
     private List<UserDto> user_list;
+    
+    public MemeberManagement(List<UserDto> user_list) {
+        initComponents();
+        this.user_list = user_list;
+        jTable1.setRowSelectionAllowed(true);
+        this.model = (DefaultTableModel) jTable1.getModel();
+    }
     
     public MemeberManagement(ManagementUser controller, List<UserDto> user_list) {
         initComponents();

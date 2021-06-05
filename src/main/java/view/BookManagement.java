@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package view;
 
 import java.util.List;
@@ -15,9 +10,16 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.SQLException;
 
-public class BookManagement extends TemplateMethod {
+public class BookManagement extends AbstractManagement {
     private ManagementBooks controller;
     private List<BookDto> bookList;
+    
+    public BookManagement(List<BookDto> bookList) {
+        initComponents();
+        this.bookList = bookList;
+        jTable1.setRowSelectionAllowed(true);
+        this.model = (DefaultTableModel) jTable1.getModel();
+    }
     
     public BookManagement(ManagementBooks controller, List<BookDto> bookList) {
         initComponents();
@@ -175,7 +177,7 @@ public class BookManagement extends TemplateMethod {
            bookList = controller.searchBooks(jComboBox1.getSelectedItem().toString(), jTextField1.getText());
            for(int i = 0 ; i < bookList.size() ; i++) {
                 BookDto data = bookList.get(i);
-                Object[] row = {data.getTitle(), data.getGenre(), data.getAuthor(), data.getStatus(), data.getCount().toString()};
+                Object[] row = {data.getTitle(), data.getGenre(), data.getAuthor(), data.getStatus(), data.getCount()};
                 model.addRow(row);
             }
         } catch (SQLException e) {
@@ -196,7 +198,7 @@ public class BookManagement extends TemplateMethod {
     void makeModel() {
         for(int i = 0 ; i < bookList.size() ; i++) {
             BookDto data = bookList.get(i);
-            Object[] row = {data.getTitle(), data.getGenre(), data.getAuthor(), data.getStatus(), data.getCount().toString()};
+            Object[] row = {data.getTitle(), data.getGenre(), data.getAuthor(), data.getStatus(), data.getCount()};
             model.addRow(row);
         }
     }

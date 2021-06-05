@@ -28,10 +28,12 @@ public class ManagementBooks extends EditBook implements ControllerInterface {
         mainView = new BookManagement(this, book_list);
         addView = new AddBook(this);
         editView = new view.EditBook(this, book_list.get(0));
+        this.setLogger(ManagementBooks.class.getName());
     }
     
     @Override
     public void start() {
+        this.makeInfoLog("Access Management Books.");
         mainView.setVisible(true);
     }
     

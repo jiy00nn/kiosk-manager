@@ -7,7 +7,7 @@ package view;
 
 import javax.swing.table.DefaultTableModel;
 
-public abstract class TemplateMethod extends javax.swing.JFrame {
+public abstract class AbstractManagement extends javax.swing.JFrame {
     
     public DefaultTableModel model;
     
@@ -19,4 +19,8 @@ public abstract class TemplateMethod extends javax.swing.JFrame {
     
     abstract void makeModel();
     abstract void setTableModel();
+    
+    public DefaultTableModel getModel() {
+        return this.model;
+    }
 }

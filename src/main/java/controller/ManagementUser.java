@@ -30,10 +30,12 @@ public class ManagementUser extends EditUser implements ControllerInterface {
             javax.swing.JOptionPane.showMessageDialog(null, "Cannot load user list.");
         }
         view = new MemeberManagement(this, this.user_list);
+        this.setLogger(ManagementUser.class.getName());
     };
     
     @Override
     public void start(){
+        this.makeInfoLog("Access Management Users.");
         view.setVisible(true);
     }
     
@@ -42,6 +44,7 @@ public class ManagementUser extends EditUser implements ControllerInterface {
         view.setVisible(false);
         new Management().start();
     }
+ 
     
     public List<UserDto> getUserList() {
         try{

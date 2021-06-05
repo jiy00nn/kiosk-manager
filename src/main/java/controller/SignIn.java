@@ -14,14 +14,26 @@ public class SignIn {
     private final ManagerDao dao;
     private final view.SignIn view;
     
-    public SignIn() {
+    private SignIn() {
         data = new ManagerDto();
         dao = new ManagerDao();
         view = new view.SignIn(this);
     };
     
+    private static class LazyHolder {
+        private static final SignIn INSTANCE = new SignIn();
+    }
+    
+    public static SignIn getInstance() {
+        return LazyHolder.INSTANCE;
+    }
+    
     public void start() {
         view.setVisible(true);
+    }
+    
+    public ManagerDto getData() {
+        return this.data;
     }
     
     public void setData(ManagerDto data) {

@@ -12,7 +12,8 @@ public class Manager {
     public static void main(String[] args) {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new SignIn().start();
+                SignIn signIn = SignIn.getInstance();
+                signIn.start();
             }
         });
     }
